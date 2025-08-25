@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model WebhookEvent {
+  id          Int      @id @default(autoincrement())
+  paymentOrderId  String  @db.VarChar(255)
+  clientId  String  @db.VarChar(255)
+  requestorId String  @db.VarChar(255)
+  payload     Json
+  receivedAt  DateTime @map("received_at")
+
+  @@map("webhook_events")
+} 
