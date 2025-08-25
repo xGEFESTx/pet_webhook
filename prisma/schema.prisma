@@ -8,12 +8,14 @@ datasource db {
 }
 
 model WebhookEvent {
-  id          Int      @id @default(autoincrement())
-  paymentOrderId  String  @db.VarChar(255)
-  clientId  String  @db.VarChar(255)
-  requestorId String  @db.VarChar(255)
-  payload     Json
-  receivedAt  DateTime @map("received_at")
+  id                     Int      @id @default(autoincrement())
+  externalPaymentOrderId String   @db.VarChar(255)
+  paymentOrderId         Int
+  clientId               String   @db.VarChar(255)
+  requestorId            String   @db.VarChar(255)
+  status                 String   @db.VarChar(255)
+  payload                Json
+  receivedAt             DateTime @map("received_at")
 
   @@map("webhook_events")
-} 
+}
