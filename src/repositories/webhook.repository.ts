@@ -1,15 +1,15 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { WebhookPayload } from '../types/webhook.types';
 import logger from '../utils/logger';
-import { stat } from 'fs';
 
 interface WebhookEventRecord {
   id: number;
-  paymentOrderId: string;
+  externalPaymentOrderId: string;
+  paymentOrderId: number;
   clientId: string;
   requestorId: string;
+  status: string;
   payload: string;
-  status: string
   receivedAt: Date;
 }
 
@@ -28,11 +28,12 @@ export class WebhookRepository {
     try {
       const webhookEvent = await this.prisma.webhookEvent.create({
         data: {
-          paymentOrderId: payload?.paymentOrderId,
-          clientId: payload?.clientId,
-          requestorId: payload?.requestorId,
-          status: payload?.status,
-          payload,
+          externalPaymentOrderId: payload.externalPaymentOrderId,
+          paymentOrderId: payload.paymentOrderId,
+          clientId: payload.clientId,
+          requestorId: payload.requestorId,
+          status: payload.status,
+          payload: payload as unknown as Prisma.JsonObject,
           receivedAt: new Date(),
         },
       });
